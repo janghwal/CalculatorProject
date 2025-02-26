@@ -4,11 +4,16 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Calculator {
+    //모든 계산 결과를 저장할 리스트
     private ArrayList<String> resultList = new ArrayList<>();
+    //연산에 사용 할 두개의 숫자
     private Integer num1 = null, num2 = null;
+    //연산에 사용되는 연산자
     private String operator = null;
+    //리스트에 넣기 전 저장되는 버퍼
     private StringBuilder sb = new StringBuilder();
 
+    //시작 매서드
     public void start(){
         Scanner scan = new Scanner(System.in);
 
@@ -74,6 +79,7 @@ public class Calculator {
         }
     }
 
+    //하나의 값을 가져오는 함수
     public void getResult(int num){
         try{
             System.out.println(num+"번째 기록: "+resultList.get(num-1));
@@ -82,6 +88,7 @@ public class Calculator {
         }
     }
 
+    //모든 결과 값을 가져오는 함수
     public void getResultAll(){
         if (!resultList.isEmpty()) {
             int i = 1;
@@ -94,10 +101,12 @@ public class Calculator {
         }
     }
 
+    //저장된 값을 모두 지운다.
     public void deleteAllResults(){
         resultList.clear();
     }
 
+    //가장 오래된 값을 하나 지운다.
     public void deleteOldResults(){
         resultList.subList(0, 1).clear();
     }
