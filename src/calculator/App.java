@@ -4,78 +4,36 @@ import java.util.*;
 
 public class App {
     public static void main(String[] args) {
-        System.out.println( "Calculator Project");
-        System.out.println( "exit : 종료");
+        Calculator calculator = new Calculator();
         Scanner scan = new Scanner(System.in);
-        //계산 결과가 저장될 창고
-        ArrayList<String> resultList = new ArrayList<>();
-        Integer num1 = null, num2 = null;
-        String operator = null;
-        StringBuilder sb = new StringBuilder();
 
-        activeRoop:
+        mainRoop:
         while(true){
-            String input = scan.nextLine();
-            if(input.equals("exit")){
-                break;
-            }
-            try{
-                if(operator == null){
-                    num1 = Integer.parseInt(input);
-                    sb.setLength(0);
-                    sb.append(input);
-                }else{
-                    num2 = Integer.parseInt(input);
-                    switch(operator){
-                        case "+":
-                            num1 = num1+num2;
-                            break;
-                        case "-":
-                            num1 = num1-num2;
-                            break;
-                        case "*":
-                            num1 = num1*num2;
-                            break;
-                        case "/":
-                            try{
-                                num1 = num1/num2;
-                            }catch(ArithmeticException e){
-                                System.out.println("0으로 나눌 수 없습니다");
-                                break activeRoop;
-                            }
-                            break;
+            System.out.println("========================================================================");
+            System.out.println("1. 계산기 사용           2. 계산 기록 확인하기           3. 종료하기");
+            System.out.println("========================================================================");
+            int selectedAction = scan.nextInt();
+            System.out.println("========================================================================");
+            switch(selectedAction){
+                case 1:
+                    calculator.start();
+                    break;
+                case 2:
+                    System.out.println("1. 기록 확인             2. 모든 기록 확인하기          3.기록 삭제");
+                    int selectedRecord = scan.nextInt();
+                    if(selectedRecord == 1){
+                        System.out.print("기록 번호를 선택하세요 (예: 1, 2, 3):");
+                        calculator.getResult(scan.nextInt());
+                    }else if(selectedRecord == 2){
+                        calculator.getResultAll();
+                    }else if(selectedRecord == 3){
+                        calculator.deleteOldResults();
                     }
-                    operator = null;
-                    sb.append(input).append("=").append(String.valueOf(num1));
-                    resultList.add(sb.toString());
-                    System.out.println(resultList.get(resultList.size()-1)+"                   exit : 종료");
-                    System.out.println("========================================================================");
-                    sb.setLength(0);
-                    sb.append(num1);
-                }
-            }catch(NumberFormatException e){
-                if(!(input.equals("+")||input.equals("-")||input.equals("*")||input.equals("/"))) {
-                    System.out.println("숫자 혹은 연산자를 입력해주세요");
-                }else{
-                    if(num1 == null){
-                        num1 = 0;
-                        operator = input;
-                        sb.append("0").append(operator);
-                    }else if(operator != null){
-                        operator = input;
-                        sb.deleteCharAt(sb.length() - 1);
-                        sb.append(operator);
-                    }
-                    else{
-                        operator = input;
-                        sb.append(operator);
-                    }
-                }
+                    break;
+                default:
+                    System.out.println("프로그램이 종료 됩니다.");
+                    break mainRoop;
             }
         }
-//        컬렉션 사용 테스트
-//        for (String result : resultList){
-//            System.out.println(result);
-//        }
     }
 }
