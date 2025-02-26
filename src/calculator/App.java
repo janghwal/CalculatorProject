@@ -13,6 +13,7 @@ public class App {
         String operator = null;
         StringBuilder sb = new StringBuilder();
 
+        activeRoop:
         while(true){
             String input = scan.nextLine();
             if(input.equals("exit")){
@@ -40,14 +41,15 @@ public class App {
                                 num1 = num1/num2;
                             }catch(ArithmeticException e){
                                 System.out.println("0으로 나눌 수 없습니다");
-                                System.exit(0);
+                                break activeRoop;
                             }
                             break;
                     }
                     operator = null;
                     sb.append(input).append("=").append(String.valueOf(num1));
-                    System.out.println(sb);
                     resultList.add(sb.toString());
+                    System.out.println(resultList.get(resultList.size()-1)+"                   exit : 종료");
+                    System.out.println("========================================================================");
                     sb.setLength(0);
                     sb.append(num1);
                 }
@@ -71,5 +73,9 @@ public class App {
                 }
             }
         }
+//        컬렉션 사용 테스트
+//        for (String result : resultList){
+//            System.out.println(result);
+//        }
     }
 }
