@@ -76,7 +76,7 @@ public class Calculator {
 
     public void getResult(int num){
         try{
-            System.out.println(num-1+"번째 기록: "+resultList.get(num));
+            System.out.println(num+"번째 기록: "+resultList.get(num-1));
         }catch(IndexOutOfBoundsException e){
             System.out.println("해당 값이 없습니다.");
         }
