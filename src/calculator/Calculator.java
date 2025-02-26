@@ -9,11 +9,6 @@ public class Calculator {
     private String operator = null;
     private StringBuilder sb = new StringBuilder();
 
-    Calculator(){
-        System.out.println( "Calculator 시작");
-        System.out.println( "exit : 종료");
-    }
-
     public void start(){
         Scanner scan = new Scanner(System.in);
 
