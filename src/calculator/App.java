@@ -30,8 +30,11 @@ public class App {
                         calculator.deleteOldResults();
                     }
                     break;
+                case 3:
+                    System.out.println("프로그램이 종료 됩니다.");
+                    break mainRoop;
                 default:
-                    System.out.println("원하는 기능을 선택하세요 (예: 1, 2, 3).");
+                    System.out.println("기능 번호를 선택하세요 (예: 1, 2, 3)");
                     break;
             }
         }
