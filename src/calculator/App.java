@@ -5,53 +5,71 @@ import java.util.*;
 public class App {
     public static void main(String[] args) {
         System.out.println( "Calculator Project");
+        System.out.println( "exit : 종료");
+        Scanner scan = new Scanner(System.in);
         //계산 결과가 저장될 창고
-        ArrayList<String> list = new ArrayList<>();
+        ArrayList<String> resultList = new ArrayList<>();
         Integer num1 = null, num2 = null;
         String operator = null;
         StringBuilder sb = new StringBuilder();
 
         while(true){
-            String first = stringCheck();
+            String input = scan.nextLine();
+            if(input.equals("exit")){
+                break;
+            }
             try{
                 if(operator == null){
-                    num1 = Integer.parseInt(first);
+                    num1 = Integer.parseInt(input);
                     sb.setLength(0);
-                    sb.append(first);
+                    sb.append(input);
                 }else{
-                    num2 = Integer.parseInt(first);
-                    num1 = calc(num1, num2);
+                    num2 = Integer.parseInt(input);
+                    switch(operator){
+                        case "+":
+                            num1 = num1+num2;
+                            break;
+                        case "-":
+                            num1 = num1-num2;
+                            break;
+                        case "*":
+                            num1 = num1*num2;
+                            break;
+                        case "/":
+                            try{
+                                num1 = num1/num2;
+                            }catch(ArithmeticException e){
+                                System.out.println("0으로 나눌 수 없습니다");
+                                System.exit(0);
+                            }
+                            break;
+                    }
                     operator = null;
-                    sb.append(first).append("=").append(String.valueOf(num1));
+                    sb.append(input).append("=").append(String.valueOf(num1));
                     System.out.println(sb);
+                    resultList.add(sb.toString());
                     sb.setLength(0);
                     sb.append(num1);
                 }
             }catch(NumberFormatException e){
-                if(num1 == null){
-                    num1 = 0;
-                    operator = first;
-                    sb.append("0").append(operator);
+                if(!(input.equals("+")||input.equals("-")||input.equals("*")||input.equals("/"))) {
+                    System.out.println("숫자 혹은 연산자를 입력해주세요");
                 }else{
-                    operator = first;
-                    sb.append(operator);
+                    if(num1 == null){
+                        num1 = 0;
+                        operator = input;
+                        sb.append("0").append(operator);
+                    }else if(operator != null){
+                        operator = input;
+                        sb.deleteCharAt(sb.length() - 1);
+                        sb.append(operator);
+                    }
+                    else{
+                        operator = input;
+                        sb.append(operator);
+                    }
                 }
             }
         }
-    }
-
-    //사용자로부터의 입력 exit 일 경우 종료
-    public static String stringCheck(){
-        Scanner scan = new Scanner(System.in);
-        String returnString = scan.nextLine();
-        if(returnString.equals("exit")){
-            System.exit(0);
-        }
-        return returnString;
-    }
-
-    public static int calc(int num1, int num2){
-        System.out.println(num1+num2);
-        return num1+num2;
     }
 }
