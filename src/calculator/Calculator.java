@@ -13,6 +13,12 @@ public class Calculator {
     //리스트에 넣기 전 저장되는 버퍼
     private StringBuilder sb = new StringBuilder();
 
+
+
+    // 계산 식, 계산 결과를 저장하기 위한 ArrayList
+    // String 타입의 ArrayList를 사용할 경우 이후 값 비교가 복잡할 것이라 생각하였다.
+    private ArrayList<CalculationResult> calculationResults = new ArrayList<>();
+
     //시작 매서드
     public void start(){
         Scanner scan = new Scanner(System.in);
