@@ -8,9 +8,4 @@ public class CalculationResult<T> {
         this.expression = expression;
         this.result = result;
     }
-
-    public T getResult(){
-        return this.result;
-    }
-
 }

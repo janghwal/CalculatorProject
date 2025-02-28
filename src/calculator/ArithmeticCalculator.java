@@ -1,22 +1,11 @@
 package calculator;
 
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class ArithmeticCalculator {
     //계산 결과 저장
     private ArrayList<CalculationResult> calculationResults = new ArrayList<>();
-
-    //생성자
-    public ArithmeticCalculator(int mode){
-        //일반(사칙연산) 계산기, 공학용 계산기 만들기
-        if (mode == 1) {
-            this.start();
-        }
-        else {
-
-        }
-    }
 
     public void start(){
         int selectedMainAction;
@@ -29,9 +18,9 @@ public class ArithmeticCalculator {
                 if(selectedRecordAction == 1) { //계산기 사용
                     this.printAllResult();
                 }else if(selectedRecordAction == 2){
-
+                    deleteAllResult();
                 }else{
-
+                    filterResult();
                 }
             } else { // 프로그램 종료
                 System.out.println("프로그램을 종료합니다.");
@@ -57,7 +46,95 @@ public class ArithmeticCalculator {
     }
 
     public void calculate(){
+        Scanner scan = new Scanner(System.in);
+        System.out.println("========================================================================");
+        StringBuilder stringBuf = new StringBuilder();
+        Number num1 = null, num2;
+        String operator = null;
 
+        activeRoop:
+        while(true){
+            String input = scan.nextLine();
+            if(input.equals("exit")) {
+                break;
+            }
+            try{
+                if(operator == null){
+                    num1 = Double.parseDouble(input);
+                    stringBuf.setLength(0);
+                    stringBuf.append(input).append(" ");;
+                }else{
+                    num2 = Double.parseDouble(input);
+                    switch(operator){
+                        case "+":
+                            num1 = this.add(num1, num2);
+                            break;
+                        case "-":
+                            num1 = this.subtract(num1, num2);
+                            break;
+                        case "*":
+                            num1 = this.multiply(num1, num2);
+                            break;
+                        case "/":
+                            try{
+                                num1 = this.divide(num1, num2);
+                            }catch(ArithmeticException e){
+                                System.out.println("0으로 나눌 수 없습니다");
+                                break activeRoop;
+                            }
+                            break;
+                    }
+                    operator = null;
+                    stringBuf.append(input).append(" ");
+                    this.recordResult(stringBuf.toString(), num1);
+                    this.printResult();
+                    System.out.println("========================================================================");
+                    stringBuf.setLength(0);
+                    stringBuf.append(num1).append(" ");;
+                }
+            }catch(NumberFormatException e){
+                if(!(input.equals("+")||input.equals("-")||input.equals("*")||input.equals("/"))) {
+                    System.out.println("숫자 혹은 연산자를 입력해주세요");
+                }else{
+                    if(num1 == null){
+                        num1 = 0;
+                        operator = input;
+                        stringBuf.append("0").append(" ").append(operator);
+                    }else if(operator != null){
+                        operator = input;
+                        stringBuf.delete(stringBuf.length() - 2, stringBuf.length());
+                        stringBuf.append(operator).append(" ");;
+                    }
+                    else{
+                        operator = input;
+                        stringBuf.append(operator).append(" ");;
+                    }
+                }
+            }
+
+        }
+    }
+
+    public <T extends Number> T add(T a, T b) {
+        return (T) Double.valueOf(a.doubleValue() + b.doubleValue());
+    }
+
+    // 뺄셈
+    public <T extends Number> T subtract(T a, T b) {
+        return (T) Double.valueOf(a.doubleValue() - b.doubleValue());
+    }
+
+    // 곱셈
+    public <T extends Number> T multiply(T a, T b) {
+        return (T) Double.valueOf(a.doubleValue() * b.doubleValue());
+    }
+
+    // 나눗셈
+    public <T extends Number> T  divide(T a, T b) {
+        if (b.doubleValue() == 0) {
+            throw new ArithmeticException("0으로 나눌 수 없습니다.");
+        }
+        return (T) Double.valueOf(a.doubleValue() / b.doubleValue());
     }
 
     public void recordResult (String expression, Object result) {
@@ -87,8 +164,40 @@ public class ArithmeticCalculator {
         }
         int i = 1;
         for(CalculationResult result : calculationResults){
-            System.out.println(i+". "+result.expression+" = "+result.result);
+            System.out.println(i+". "+result.expression+"= "+result.result);
             i++;
         }
+    }
+
+    public void printResult() {
+        System.out.println(calculationResults.get(calculationResults.size()-1).expression + "= " + calculationResults.get(calculationResults.size()-1).result+"                   exit : 종료");
+    }
+
+    public void deleteAllResult() {
+        calculationResults.clear();
+    }
+
+    public void filterResult() {
+        Scanner scan = new Scanner(System.in);
+        System.out.print("기준이 될 값을 입력하세요: ");
+
+        double thresholdValue = scan.nextDouble();
+        List<CalculationResult> ret = calculationResults.stream().filter(result -> {
+            // 결과 값이 숫자일 경우만 처리
+            if (result.result instanceof Number) {
+                return ((Number) result.result).doubleValue() > thresholdValue;
+            }
+            return false;
+        }).collect(Collectors.toList());
+
+        if (ret.isEmpty()) {
+            System.out.println("입력하신 값보다 큰 결과가 없습니다.");
+        } else {
+            System.out.println("입력하신 값보다 큰 계산 결과들:");
+            for (CalculationResult result : ret) {
+                System.out.println(result.expression + " = " + result.result);
+            }
+        }
+
     }
 }
