@@ -53,6 +53,7 @@ public class ArithmeticCalculator {
         StringBuilder stringBuf = new StringBuilder();
         Number num1 = null, num2;
         OperatorType operator = null;
+        Double A = 0.0, B;
 
         activeRoop:
         while(true){
@@ -62,24 +63,36 @@ public class ArithmeticCalculator {
             }
             try{
                 if(operator == null){
+                    A = Double.parseDouble(input);
                     num1 = Double.parseDouble(input);
                     stringBuf.setLength(0);
                     stringBuf.append(input).append(" ");;
                 }else{
                     num2 = Double.parseDouble(input);
+                    B = Double.parseDouble(input);
+
+                    if( A % 1 == 0 && B % 1 == 0){
+                        num1 = A.intValue();
+                        num2 = B.intValue();
+                    }
+
                     switch(operator){
                         case ADD:
                             num1 = this.add(num1, num2);
+                            A = num1.doubleValue();
                             break;
                         case SUBTRACT:
                             num1 = this.subtract(num1, num2);
+                            A = num1.doubleValue();
                             break;
                         case MULTIPLY:
                             num1 = this.multiply(num1, num2);
+                            A = num1.doubleValue();
                             break;
                         case DIVIDE:
                             try{
                                 num1 = this.divide(num1, num2);
+                                A = num1.doubleValue();
                             }catch(ArithmeticException e){
                                 System.out.println("0으로 나눌 수 없습니다");
                                 break activeRoop;
@@ -126,23 +139,41 @@ public class ArithmeticCalculator {
     }
 
     public <T extends Number> T add(T a, T b) {
-        return (T) Double.valueOf(a.doubleValue() + b.doubleValue());
+        double result = a.doubleValue() + b.doubleValue();
+
+        if (a instanceof Integer) {
+            return (T) Integer.valueOf((int) result);
+        } else {
+            return (T) Double.valueOf(result);
+        }
     }
 
     // 뺄셈
     public <T extends Number> T subtract(T a, T b) {
-        return (T) Double.valueOf(a.doubleValue() - b.doubleValue());
+        double result = a.doubleValue() - b.doubleValue();
+
+        if (a instanceof Integer) {
+            return (T) Integer.valueOf((int) result);
+        } else {
+            return (T) Double.valueOf(result);
+        }
     }
 
     // 곱셈
     public <T extends Number> T multiply(T a, T b) {
-        return (T) Double.valueOf(a.doubleValue() * b.doubleValue());
+        double result = a.doubleValue() * b.doubleValue();
+
+        if (a instanceof Integer) {
+            return (T) Integer.valueOf((int) result);
+        } else {
+            return (T) Double.valueOf(result);
+        }
     }
 
     // 나눗셈
     public <T extends Number> T  divide(T a, T b) {
         if (b.doubleValue() == 0) {
-            throw new ArithmeticException("0으로 나눌 수 없습니다.");
+            throw new ArithmeticException();
         }
         return (T) Double.valueOf(a.doubleValue() / b.doubleValue());
     }
